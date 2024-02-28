@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { ReactNode, Suspense } from "react";
 import Navigation from "components/Navigation";
+import TopHeader from "components/TopHeader";
+import Footer from "components/Footer";
 import { locales } from "../../config";
 import type { Metadata } from "next";
 import LoadingSkeleton from "components/LoadingSkeleton";
@@ -43,12 +45,16 @@ export default async function LocaleLayout({
   unstable_setRequestLocale(locale);
 
   return (
-    <html className="h-full" lang={locale}>
-      <body className={clsx(inter.className, "flex h-full flex-col")}>
-        <StyledComponentsRegistry>
-          <Navigation />
-          <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
-        </StyledComponentsRegistry>
+    <html lang={locale}>
+      <body>
+        <div className="app-wrapper">
+          <StyledComponentsRegistry>
+            <TopHeader></TopHeader>
+            <Navigation />
+            <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
+            <Footer></Footer>
+          </StyledComponentsRegistry>
+        </div>
       </body>
     </html>
   );

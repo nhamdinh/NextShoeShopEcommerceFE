@@ -1,3 +1,4 @@
+
 import { useTranslations } from "next-intl";
 import PageLayout from "components/PageLayout";
 import { getAllUsers } from "apis/apisUser";
@@ -17,7 +18,7 @@ const UsersPage = async (props: any) => {
   console.log(data);
   return (
     <Users
-    users={data ?? []}
+    users={data?.code === 404 ? [] : data ?? []}
     metadata={{
       totalCount,
       currentPage,
