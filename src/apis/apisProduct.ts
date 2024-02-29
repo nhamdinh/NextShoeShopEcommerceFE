@@ -1,8 +1,7 @@
 "use server";
 import { API_LINK } from "utils/constants";
 import { deleteData, getData, getDataById, postData, updateData } from "./apis";
-const BE_API = API_LINK + "store/products";
-
+const BE_API = API_LINK + "products";
 export const createUser = async (data: any) => {
   const response = await postData(`${BE_API}`, data, {
     tag: "getAllProducts",
@@ -35,8 +34,11 @@ export const updateUserById = async (data: any) => {
   return await response.json();
 };
 
-export const getAllProducts = async ({ currentPage, PAGE_SIZE }: any) => {
-  return await getData(`${BE_API}`, {
-    tags: ["getAllProducts"],
-  });
+export const getAllProducts = async ({ page, limit, keyword }: any) => {
+  return await getData(
+    `${BE_API}/all?page=${page}&limit=${limit}&keyword=${keyword}`,
+    {
+      tags: ["getAllProducts"],
+    }
+  );
 };

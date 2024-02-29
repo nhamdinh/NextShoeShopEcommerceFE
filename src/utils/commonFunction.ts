@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { NextApiResponse } from "next";
 import { serialize, CookieSerializeOptions } from "cookie";
 import moment from "moment";
-import { BUFFER_1, BUFFER_2, SVG_SPIN, regexPassword } from "./constants";
+import { BUFFER_1, BUFFER_2, REGEX_CURRENCY, SVG_SPIN, regexPassword } from "./constants";
 
 export const passwordCheck = (pass: any) => {
   if (regexPassword.exec(pass) === null) {
@@ -54,27 +54,28 @@ export const formatMoney = (text: any, isChinaMoney?: boolean) => {
   }
 };
 
-export const formatMoneyCurrency = (text: any, isChinaMoney = false) => {
+export const formatMoneyCurrency = (text: any) => {
   if (!text) {
-    if (!isChinaMoney) {
-      return "0원";
-    } else {
-      //format china currency delivery_type === 1
-      return "￥ 0.00";
-    }
+    return "0.00";
   }
-  //format korea currency delivery_type === 2
-  if (!isChinaMoney) {
-    return addCommas(removeNonNumeric(text.toString())) + "원";
-  } else {
-    //format china currency delivery_type === 1
-    let numberText = +text;
-    let string = numberText.toFixed(2).toString();
-    let length = string.length;
-    let string_slice = string.substr(0, length - 3);
-    let string_slice3 = string.substr(length - 3, length - 1);
-    return "￥ " + addCommas(removeNonNumeric(string_slice)) + string_slice3;
+  //format china currency delivery_type === 1
+  // console.log(text)
+  let numberText = +text;
+  if (+text < 0) {
+    numberText = +numberText * -1;
   }
+
+  let string = numberText.toFixed(2).toString();
+  let length = string.length;
+  let string_slice = string.substr(0, length - 3);
+  let string_slice3 = string.substr(length - 3, length - 1);
+  if (+text < 0)
+    return (
+      "-" +
+      string_slice.toString().replace(REGEX_CURRENCY, "$1,") +
+      string_slice3
+    );
+  return string_slice.toString().replace(REGEX_CURRENCY, "$1,") + string_slice3;
 };
 
 export const rawMarkup = (rawMarkup = "") => {

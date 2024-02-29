@@ -1,9 +1,6 @@
 
-import { useTranslations } from "next-intl";
-import PageLayout from "components/PageLayout";
 import { getAllUsers } from "apis/apisUser";
 import { PAGE_SIZE } from "utils/constants";
-import { Suspense } from "react";
 import Users from "./components/Users";
 
 type Props = {
@@ -15,7 +12,7 @@ const UsersPage = async (props: any) => {
   const res = await getAllUsers({ currentPage, PAGE_SIZE });
   const totalCount = +(res.headers?.get("X-Total-Count") ?? 1);
   const data = await res.json();
-  console.log(data);
+  // console.log(data);
   return (
     <Users
     users={data?.code === 404 ? [] : data ?? []}

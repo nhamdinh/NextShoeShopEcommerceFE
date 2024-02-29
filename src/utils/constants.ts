@@ -18,7 +18,7 @@ export const LANG_KO = "ko";
 export const LANG_EN = "en";
 export const DEFAULT_LANG = "ko";
 
-export const PAGE_SIZE = 2;
+export const PAGE_SIZE = 9;
 export const PAGE_SIZE_16 = 16;
 export const PAGE_SIZE_20 = 20;
 export const FIRST_PAGE = 1;

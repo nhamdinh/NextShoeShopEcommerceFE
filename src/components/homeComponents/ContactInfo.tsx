@@ -20,7 +20,7 @@ const ContactInfo = () => {
             <div className="info-image">
               <i className="fas fa-map-marker-alt"></i>
             </div>
-            <h5>Nham.nguyen</h5>
+            <h5>nham.nguyen</h5>
             <p>01 Duy Tan - Cau Giay</p>
           </div>
         </div>

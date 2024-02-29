@@ -6,33 +6,49 @@ import Rating from "./Rating";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
-import { PAGE_SIZE } from "../../utils/constants";
 import { formatMoneyCurrency } from "../../utils/commonFunction";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const ShopSection = ({ pagenumber, keyword, brand }: any) => {
-  // const navigate = useNavigate();
-  const [dataFetched, setdataFetched] = useState<any>([]);
+const ShopSection = (props: any) => {
+  const { data, pagenumber, keyword, brand } = props;
 
-  const [currentPage, setCurrentPage] = useState<any>(1);
-  const [total, setTotal] = useState<any>(1);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const [params, setParams] = useState<any>({
-    page: pagenumber ?? 1,
-    keyword: keyword ?? "",
-    brand: brand ?? "",
-    limit: PAGE_SIZE,
-    order: "desc",
-    orderBy: "createdAt",
-  });
+  const error = data?.code === 404;
+  const [isLoading, setIsLoading] = useState<any>(false);
 
   useEffect(() => {
-    setParams({
-      ...params,
-      page: pagenumber ?? 1,
-      keyword: keyword ?? "",
-      brand: brand ?? "",
-    });
-  }, [pagenumber, keyword, brand]);
+    if (data?.metadata?.products) setIsLoading(false);
+  }, [data]);
+
+  // const navigate = useNavigate();
+  // console.log(data?.metadata?.totalPages)
+  // console.log(data?.metadata)
+  // console.log(data?.metadata)
+  // console.log(data?.metadata)
+
+  // const [currentPage, setCurrentPage] = useState<any>(1);
+  // const [total, setTotal] = useState<any>(1);
+
+  // const [params, setParams] = useState<any>({
+  //   page: pagenumber ?? 1,
+  //   keyword: keyword ?? "",
+  //   limit: PAGE_SIZE,
+  //   brand: brand ?? "",
+  //   order: "desc",
+  //   orderBy: "createdAt",
+  // });
+
+  // useEffect(() => {
+  //   setParams({
+  //     ...params,
+  //     page: pagenumber ?? 1,
+  //     keyword: keyword ?? "",
+  //     brand: brand ?? "",
+  //   });
+  // }, [pagenumber, keyword, brand]);
 
   // const {
   //   data: dataProducts,
@@ -50,95 +66,99 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   //     setCurrentPage(dataProducts?.page);
   //   }
   // }, [dataProducts]);
-  const error = 0
-  const isLoading = 0
+
   return (
-    <>
-      <div className="container">
-        <div className="section">
-          <div className="row">
-            <div className="col-lg-12 col-md-12 article">
-              <div className="shopcontainer row">
-                {isLoading ? (
-                  <div className="mb-5">
-                    <Loading />
-                  </div>
-                ) : error ? (
-                  <Message variant="alert-danger" mess={error} />
-                ) : dataFetched?.length > 0 ? (
-                  <>
-                    {dataFetched?.map((product: any) => (
-                      <div
-                        className="shop col-lg-4 col-md-6 col-sm-6"
-                        key={product?._id}
-                      >
-                        <div className="border-product">
-                          <div
-                            onClick={() => {
-                              // navigate(`/product-detail?id=${product?._id}`);
-                            }}
-                          >
-                            <div className="shopBack">
-                              <img
-                                className="shopBack__img"
-                                src={product?.product_thumb}
-                                alt={product?.product_name}
-                              />
-                              <div
-                                className="shopBack__shopName"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  // navigate(
-                                  //   `/shop/${product?.product_shop?._id}`
-                                  // );
-                                }}
-                              >
-                                {product?.product_shop?.productShopName}
-                              </div>
+    <div className="container">
+      <div className="section">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 article">
+            <div className="shopcontainer row minh5">
+              {isLoading && (
+                <div className="mb-5 fixed__50__50">
+                  <Loading />
+                </div>
+              )}
+              {error ? (
+                <Message variant="alert-danger" mess={data} />
+              ) : data?.metadata?.products?.length > 0 ? (
+                <>
+                  {data?.metadata?.products?.map((product: any) => (
+                    <div
+                      className="shop col-lg-4 col-md-6 col-sm-6"
+                      key={product?._id}
+                    >
+                      <div className="border-product">
+                        <div
+                          onClick={() => {
+                            // navigate(`/product-detail?id=${product?._id}`);
+                          }}
+                        >
+                          <div className="shopBack">
+                            <img
+                              className="shopBack__img"
+                              src={product?.product_thumb}
+                              alt={product?.product_name}
+                            />
+                            <div
+                              className="shopBack__shopName"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // navigate(
+                                //   `/shop/${product?.product_shop?._id}`
+                                // );
+                              }}
+                            >
+                              {product?.product_shop?.productShopName}
                             </div>
                           </div>
+                        </div>
 
-                          <div className="shoptext">
-                            <p>
-                              <div
-                                onClick={() => {
-                                  // navigate(
-                                  //   `/product-detail?id=${product?._id}`
-                                  // );
-                                }}
-                              >
-                                {product?.product_name}
-                              </div>
-                            </p>
+                        <div className="shoptext">
+                          <p>
+                            <div
+                              onClick={() => {
+                                // navigate(
+                                //   `/product-detail?id=${product?._id}`
+                                // );
+                              }}
+                            >
+                              {product?.product_name}
+                            </div>
+                          </p>
 
-                            <Rating
-                              value={product?.product_ratings ?? 5}
-                              text={`${product?.numReviews ?? 0} reviews`}
-                            />
-                            <h3>
-                              ${formatMoneyCurrency(product?.product_price)}
-                            </h3>
-                          </div>
+                          <Rating
+                            value={product?.product_ratings ?? 5}
+                            text={`${product?.numReviews ?? 0} reviews`}
+                          />
+                          <h3>
+                            ${formatMoneyCurrency(product?.product_price)}
+                          </h3>
                         </div>
                       </div>
-                    ))}
-                  </>
-                ) : (
-                  <Message variant="alert-danger" messText="No Products" />
-                )}
-                {/* Pagination */}
-                <Pagination
-                  total={total}
-                  page={currentPage}
-                  keyword={keyword ?? ""}
-                  brand={brand ?? ""}
-                />
-              </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <Message variant="alert-danger" messText="No Products" />
+              )}
+              {/* Pagination */}
+              <Pagination
+                totalPage={+(data?.metadata?.totalPages ?? 1)}
+                currentPage={+(data?.metadata?.page ?? 1)}
+                keyword={keyword ?? ""}
+                brand={brand ?? ""}
+                cb_setCurrentPage={(page: any) => {
+                  setIsLoading(true);
+                  const __searchParams = new URLSearchParams(searchParams);
+                  __searchParams.set("page", page);
+                  router.replace(`${pathname}?${__searchParams.toString()}`);
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

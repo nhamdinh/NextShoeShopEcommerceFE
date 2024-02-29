@@ -2,7 +2,6 @@
 import { API_LINK } from "utils/constants";
 import { deleteData, getData, getDataById, postData, updateData } from "./apis";
 const BE_API = API_LINK + "users";
-
 export const createUser = async (data: any) => {
   const response = await postData(`${BE_API}`, data, {
     tag: "getAllUsers",
