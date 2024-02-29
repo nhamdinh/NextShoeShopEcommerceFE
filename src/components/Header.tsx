@@ -1,48 +1,505 @@
 "use client";
-import React, { useState } from "react";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Menu } from "antd";
-import Link from "next/link";
+import "./style.scss";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+// import {
+//   useGetProfileQuery,
+//   useLogoutMutation,
+// } from "../store/components/auth/authApi";
+import { NAME_STORAGE } from "../utils/constants";
+// import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
+// import { useCheckCartQuery } from "../store/components/orders/ordersApi";
+// import {
+//   setStProductsCart,
+//   setStoProducts,
+// } from "../store/components/products/productsSlice";
+// import {
+//   useCreateCoMutation,
+//   useGetBrandsQuery,
+//   useGetCoQuery,
+//   useGetProductsQuery,
+// } from "../store/components/products/productsApi";
+// import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
+import mainLogo from "./../../public/images/AVA79.svg";
 
-const items: MenuProps["items"] = [
-  {
-    label: <Link href={'/'}>Navigation Home</Link>,
-    key: "home",
-    icon: <SettingOutlined />,
-  },
-  {
-    label: <Link href={'/users'}>Navigation Users</Link>,
-    key: "mail",
-    icon: <MailOutlined />,
-  },
-  {
-    label: <Link href={'/login'}>Navigation Login</Link>,
-    key: "app",
-    icon: <AppstoreOutlined />,
-    disabled: false,
-  },
-];
+import axios from "axios";
+import { Link } from "navigation";
+import Image from "next/image";
 
-const Header: React.FC = () => {
-  const [current, setCurrent] = useState("home");
+const Header = () => {
+  const [keyword, setKeyword] = useState<any>("");
+  // const dispatch = useDispatch();
 
-  const onClick: MenuProps["onClick"] = (e) => {
-    // console.log("click ", e);
-    setCurrent(e.key);
+  // const [
+  //   createCo,
+  //   { isLoading: LoadingcreateReview, error: errorcreateReview },
+  // ] = useCreateCoMutation();
+
+  // const onCreateReviewProduct = async (values: any) => {
+  //   const res = await createCo({});
+  //   //@ts-ignore
+  //   const data = res?.data;
+  //   console.log(data);
+  //   if (data) {
+  //   } else {
+  //   }
+  // };
+
+  let axiosConfig = {
+    withCredentials: true,
+    credentials: "include",
+  };
+
+  const loginUser = async (data: any) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/cookie`,
+        axiosConfig
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const {
+  //   data: datacookie,
+  //   error: errBrandsx,
+  //   isSuccess: isSuccessBrandsx,
+  //   isLoading: isLoadingBrandsx,
+  // } = useGetCoQuery(
+  //   {},
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: false,
+  //   }
+  // );
+
+  // console.log(datacookie);
+
+  const [brand, setbrand] = useState<any>("All");
+  const [brands, setbrands] = useState<any>([]);
+  // const {
+  //   data: dataBrands,
+  //   error: errBrands,
+  //   isSuccess: isSuccessBrands,
+  //   isLoading: isLoadingBrands,
+  // } = useGetBrandsQuery(
+  //   {
+  //     page: 1,
+  //     limit: 1000,
+  //   },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: false,
+  //   }
+  // );
+  // useEffect(() => {
+  //   if (isSuccessBrands) {
+  //     setbrands(dataBrands?.brands);
+  //   }
+  // }, [dataBrands]);
+
+  const [dropdown, setdropdown] = useState<any>(false);
+  // const dataProducts1 = useSelector(getDataProducts);
+  const dataProducts1: any = [];
+  const [dataProducts, setdataProducts] = useState<any>([]);
+  // const {
+  //   data: dataFetch,
+  //   error: errdataProducts,
+  //   isSuccess: isSuccessdataProducts,
+  //   isLoading: isLoadingdataProducts,
+  // } = useGetProductsQuery(
+  //   {
+  //     page: 1,
+  //     limit: 1000,
+  //   },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: false,
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (isSuccessdataProducts) {
+  //     dispatch(setStoProducts(dataFetch?.metadata?.products));
+  //     setdataProducts(dataFetch?.metadata?.products);
+  //   }
+  // }, [dataFetch]);
+
+  const [cartItems, setcartItems] = useState<any>([]);
+  // const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
+  //   {},
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: false,
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (isSuccessCart) {
+  //     const productsCart = dataCart?.metadata.flatMap(
+  //       (cart: any) => cart.cart_products
+  //     );
+
+  //     setcartItems(productsCart || []);
+  //     dispatch(setStProductsCart(productsCart));
+  //   }
+  // }, [dataCart]);
+
+  const submitHandler = (value: any, bra: any) => {
+    setKeyword(value);
+    if (value.trim() || bra) {
+      // navigate(`/?search=${value.trim()}&&brand=${bra}`);
+    } else {
+      // navigate("/");
+    }
+  };
+  // const [userInfo, setdataFetched] = useState<any>({});
+  // const userInfo = useSelector(getUserInfo);
+  const userInfo: any = {};
+
+  // const {
+  //   data: dataProfile,
+  //   error,
+  //   isSuccess: isSuccessProfile,
+  //   isLoading,
+  // } = useGetProfileQuery(
+  //   {},
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: false,
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (isSuccessProfile) {
+  //     // setdataFetched(dataProfile?.metadata);
+  //     dispatch(setUserInfo({ ...dataProfile?.metadata }));
+  //     localStorage.setItem(NAME_STORAGE, dataProfile?.metadata?.name);
+  //   }
+  // }, [dataProfile]);
+
+  // useEffect(() => {
+  //   // console.log(error);
+  // }, [error]);
+
+  // const [logout] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    // await logout({});
+    // setdataFetched({});
+    // dispatch(userLogout());
+    // navigate("/");
   };
 
   return (
-    <Menu
-      onClick={onClick}
-      selectedKeys={[current]}
-      mode="horizontal"
-      items={items}
-    />
+    <div className="header">
+      <div className="container">
+        <div
+          className="mobile-header"
+          tabIndex={0}
+          onBlur={(e) => {
+            e.stopPropagation();
+            // setdropdown(false);
+          }}
+        >
+          <div className="container ">
+            <div className="row ">
+              <div className="col-6 d-flex align-items-center">
+                <Link className="navbar-brand" href="/">
+                  
+                </Link>
+                <Image
+                    src={mainLogo}
+                    // className="to-top"
+                    alt="to-top"
+                    width={240}
+                    height={240}
+                  />
+                {/* <button onClick={loginUser}>zzzzz</button> */}
+              </div>
+              <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
+                {userInfo?.name ? (
+                  <div className="btn-group">
+                    <button
+                      type="button"
+                      className="name-button dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i className="fas fa-user"></i>
+                    </button>
+                    <div className="dropdown-menu">
+                      <Link className="dropdown-item" href="/profile">
+                        Profile
+                      </Link>
+
+                      <a className="dropdown-item" onClick={logoutHandler}>
+                        Logout
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="btn-group">
+                    <button
+                      type="button"
+                      className="name-button dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i className="fas fa-user"></i>
+                    </button>
+                    <div className="dropdown-menu">
+                      <Link className="dropdown-item" href="/login">
+                        Login
+                      </Link>
+
+                      <Link className="dropdown-item" href="/register">
+                        Register
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
+                <Link href="/cart" className="cart-mobile-icon">
+                  <i className="fas fa-shopping-bag"></i>
+                  <span className="badge">{cartItems.length}</span>
+                </Link>
+              </div>
+              <div className="col-12 d-flex align-items-center zxc">
+                <div className="input-group">
+                  <input
+                    type="search"
+                    className="form-control rounded search"
+                    placeholder="Search"
+                    value={keyword}
+                    onChange={(e) => {
+                      setKeyword(e.target.value);
+                      setdropdown(true);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        submitHandler(keyword, brand);
+                        setdropdown(false);
+                      }
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      setdropdown(false);
+                      submitHandler(keyword, brand);
+                    }}
+                    className="search-button"
+                  >
+                    search
+                  </button>
+
+                  <select
+                    className="search-button"
+                    value={brand}
+                    onChange={(e) => {
+                      setbrand(e.target.value);
+                      submitHandler(keyword, e.target.value);
+                    }}
+                  >
+                    <option className="option__br">All</option>
+
+                    {brands.map((bra: any, index: number) => {
+                      return (
+                        <option
+                          className="option__br"
+                          key={index}
+                          value={bra?.brand}
+                        >
+                          {bra?.brand}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                {dropdown && (
+                  <div className="search-container">
+                    <div className="dropdown">
+                      {dataProducts1
+                        .filter((item: any) => {
+                          const searchTerm = keyword.toLowerCase();
+                          const fullName = item?.product_name.toLowerCase();
+
+                          return (
+                            searchTerm &&
+                            fullName.includes(searchTerm) &&
+                            fullName !== searchTerm
+                          );
+                        })
+                        .slice(0, 10)
+                        .map((item: any) => (
+                          <div
+                            className="dropdown-row"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // submitHandler(item?.name, brand);
+
+                              // navigate(`product-detail?id=${item?._id}`);
+                              setKeyword("");
+                            }}
+                            key={item?._id}
+                          >
+                            {item?.product_name}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="pc-header"
+          tabIndex={1}
+          onBlur={(e) => {
+            e.stopPropagation();
+
+            // setdropdown(false);
+          }}
+        >
+          <div className="row">
+            <div className="col-md-3 col-4 d-flex align-items-center">
+              <Link className="navbar-brand" href="/">
+                <img src={mainLogo} alt="userprofileimage" />
+              </Link>
+              {/* <button onClick={loginUser}>zzzzz</button> */}
+            </div>
+            <div className="col-md-6 col-8 d-flex align-items-center zxc">
+              <div className="input-group">
+                <input
+                  type="search"
+                  className="form-control rounded search"
+                  placeholder="Search"
+                  value={keyword}
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                    setdropdown(true);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      submitHandler(keyword, brand);
+                      setdropdown(false);
+                    }
+                  }}
+                />
+                <button
+                  type="submit"
+                  onClick={() => {
+                    setdropdown(false);
+                    submitHandler(keyword, brand);
+                  }}
+                  className="search-button"
+                >
+                  search
+                </button>
+                <select
+                  className="search-button"
+                  value={brand}
+                  onChange={(e) => {
+                    setbrand(e.target.value);
+                    submitHandler(keyword, e.target.value);
+                  }}
+                >
+                  <option className="option__br">All</option>
+
+                  {brands.map((bra: any, index: number) => {
+                    return (
+                      <option
+                        className="option__br"
+                        key={index}
+                        value={bra?.brand}
+                      >
+                        {bra?.brand}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {dropdown && (
+                <div className="search-container">
+                  <div className="dropdown">
+                    {dataProducts1
+                      .filter((item: any) => {
+                        const searchTerm = keyword.toLowerCase();
+                        const fullName = item?.product_name.toLowerCase();
+                        // console.log(searchTerm);
+                        // console.log(fullName);
+                        return (
+                          searchTerm &&
+                          fullName.includes(searchTerm) &&
+                          fullName !== searchTerm
+                        );
+                      })
+                      .slice(0, 10)
+                      .map((item: any, index: number) => (
+                        <div
+                          className="dropdown-row"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // submitHandler(item?.name, brand);
+                            // navigate(`product-detail?id=${item?._id}`);
+                            setKeyword("");
+                          }}
+                          key={item?._id}
+                        >
+                          <div className="name">{item?.product_name}</div>
+                          <img src={item?.product_thumb} alt="" />
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="col-md-3 d-flex align-items-center justify-content-end Login-Register">
+              {userInfo?.name ? (
+                <div className="btn-group">
+                  <button
+                    type="button"
+                    className="name-button dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Hi, {userInfo?.name}
+                  </button>
+                  <div className="dropdown-menu">
+                    <Link className="dropdown-item" href="/profile">
+                      Profile
+                    </Link>
+
+                    <a className="dropdown-item" onClick={logoutHandler}>
+                      Logout
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Link href="/register">Register</Link>
+                  <Link href="/login">Login</Link>
+                </>
+              )}
+
+              <Link href="/cart">
+                <i className="fas fa-shopping-bag"></i>
+                <span className="badge">{cartItems.length}</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

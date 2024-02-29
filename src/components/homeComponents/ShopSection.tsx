@@ -1,5 +1,4 @@
 "use client";
-
 import "./styles.scss";
 import React, { useEffect, useState } from "react";
 import Rating from "./Rating";

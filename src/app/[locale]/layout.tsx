@@ -9,6 +9,7 @@ import { locales } from "../../config";
 import type { Metadata } from "next";
 import LoadingSkeleton from "components/LoadingSkeleton";
 import StyledComponentsRegistry from "lib/antd.registry";
+import Header from "components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default async function LocaleLayout({
         <div className="app-wrapper">
           <StyledComponentsRegistry>
             <TopHeader></TopHeader>
+            <Header />
             <Navigation />
             <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
             <Footer></Footer>
