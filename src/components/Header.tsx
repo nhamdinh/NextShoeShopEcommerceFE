@@ -26,13 +26,15 @@ import axios from "axios";
 import { Link } from "navigation";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "store";
-import { setAuthState } from "store/authSlice";
+import { setAuthState } from "store/slices/authSlice";
+import { getIsUserLogin, getProductList } from "store/rootSelector";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>("");
   // const dispatch = useDispatch();
   const dispatch = useAppDispatch();
-  const authState = useAppSelector((state:any) => state.auth.authState);
+  const isUserLogin = useAppSelector(getIsUserLogin);
+  const productList = useAppSelector(getProductList);
   // const [
   //   createCo,
   //   { isLoading: LoadingcreateReview, error: errorcreateReview },
@@ -211,17 +213,14 @@ const Header = () => {
           <div className="container ">
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
-                <Link className="navbar-brand" href="/">
-                  
-                </Link>
+                <Link className="navbar-brand" href="/"></Link>
                 <Image
-                    src={mainLogo}
-                    // className="to-top"
-                    alt="to-top"
-                    width={240}
-                    height={240}
-
-                  />
+                  src={mainLogo}
+                  // className="to-top"
+                  alt="to-top"
+                  width={240}
+                  height={240}
+                />
                 {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -299,7 +298,6 @@ const Header = () => {
                       submitHandler(keyword, brand);
                       
                     }} */
-                    
 
                     className="search-button"
                   >
@@ -379,14 +377,13 @@ const Header = () => {
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
               <Link className="navbar-brand" href="/">
-              <Image
-                    src={mainLogo}
-                    // className="to-top"
-                    alt="to-top"
-                    width={120}
-                    height={70}
-
-                  />
+                <Image
+                  src={mainLogo}
+                  // className="to-top"
+                  alt="to-top"
+                  width={120}
+                  height={70}
+                />
               </Link>
               {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>
@@ -414,9 +411,7 @@ const Header = () => {
                   //   setdropdown(false);
                   //   submitHandler(keyword, brand);
                   // }}
-                  onClick={() => {
-                    dispatch(setAuthState(true))
-                  }}
+                  onClick={() => dispatch(setAuthState({ isUserLogin: !isUserLogin }))}
                   className="search-button"
                 >
                   search

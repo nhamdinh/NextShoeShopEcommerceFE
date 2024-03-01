@@ -1,23 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 export interface IProductState {
   storeProducts: Array<any>;
 }
 
 const initialState: IProductState = {
-    storeProducts: [],
+  storeProducts: [],
 };
 
 export const authSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setStoreProducts: (state : IProductState, action: PayloadAction<IProductState>) => {
-      state.storeProducts = action.payload?.storeProducts ?? initialState.storeProducts;
+    setStoreProducts: (
+      state: IProductState,
+      action: PayloadAction<IProductState>
+    ) => {
+      state.storeProducts =
+        action.payload?.storeProducts ?? initialState.storeProducts;
     },
   },
 });
-const { reducer, actions } = authSlice;
+const { actions } = authSlice;
 export const { setStoreProducts } = actions;
-export default reducer;
+export const productReducer = authSlice.reducer;
