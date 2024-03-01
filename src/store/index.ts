@@ -9,7 +9,7 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { persistReducer } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { authReducer, userLogout } from "./slices/authSlice";
-import { productReducer } from "./slices/productSlice";
+import { productReducer } from "./slices/productsSlice";
 
 /** persistReducer : reset k mat store -> save in storage
 const createNoopStorage = () => {

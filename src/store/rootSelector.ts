@@ -4,7 +4,7 @@ export const getUserInfo = (state: any) => state.auth.userInfo;
 export const getIsUserLogin = (state: any) => state.auth.isUserLogin;
 
 // product selector
-export const getProductList = (state: any) => state.product.storeProducts;
+export const getProductList = (state: any) => state.product.dataProducts;
 
 // custom dialog for confirm
 export const getDialogContent = (state: any) => state.dialog.content;
