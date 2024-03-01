@@ -10,7 +10,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ShopSection = (props: any) => {
   const { data, pagenumber, keyword, brand } = props;
-  console.log(data)
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -113,17 +112,16 @@ const ShopSection = (props: any) => {
                         </div>
 
                         <div className="shoptext">
-                          <p>
-                            <div
-                              onClick={() => {
-                                // navigate(
-                                //   `/product-detail?id=${product?._id}`
-                                // );
-                              }}
-                            >
-                              {product?.product_name}
-                            </div>
-                          </p>
+                          <div
+                            className="line__clamp__2"
+                            onClick={() => {
+                              // navigate(
+                              //   `/product-detail?id=${product?._id}`
+                              // );
+                            }}
+                          >
+                            {product?.product_name}
+                          </div>
 
                           <Rating
                             value={product?.product_ratings ?? 5}

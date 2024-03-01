@@ -132,6 +132,7 @@ const Header = (props: any) => {
       const __searchParams = new URLSearchParams(searchParams);
       __searchParams.set("keyword", value);
       __searchParams.set("brand", bra);
+      __searchParams.set("page", "1");
       router.replace(`${pathname}?${__searchParams.toString()}`);
     } else {
       // navigate("/");
