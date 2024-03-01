@@ -10,6 +10,8 @@ import type { Metadata } from "next";
 import LoadingSkeleton from "components/LoadingSkeleton";
 import StyledComponentsRegistry from "lib/antd.registry";
 import Header from "components/Header";
+import { getAllProducts } from "apis/apisProduct";
+import { getAllBrands } from "apis/apisBrand";
 const ReduxProvider = dynamic(() => import("./../../store/redux-provider"), {
   ssr: false,
 });
@@ -48,6 +50,18 @@ export default async function LocaleLayout({
   // Enable static rendering
   unstable_setRequestLocale(locale);
 
+  const params = {
+    page: 1,
+    limit: 1000,
+    keyword: "",
+    brand: "ALL",
+  };
+
+  const res = await getAllProducts({ ...params });
+  const resBrands = await getAllBrands({});
+  const data = await res.json();
+  const dataBrands = await resBrands.json();
+
   return (
     <html lang={locale}>
       <body className={inter.className}>
@@ -55,7 +69,7 @@ export default async function LocaleLayout({
           <StyledComponentsRegistry>
             <ReduxProvider>
               <TopHeader></TopHeader>
-              <Header />
+              <Header data={data} dataBrands={dataBrands} />
               <Navigation />
               <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
               <Footer></Footer>

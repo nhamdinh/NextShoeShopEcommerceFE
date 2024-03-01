@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 //   useGetProfileQuery,
 //   useLogoutMutation,
 // } from "../store/components/auth/authApi";
-import { NAME_STORAGE } from "../utils/constants";
+import { CONST_ALL, NAME_STORAGE } from "../utils/constants";
 // import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 // import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 // import {
@@ -28,13 +28,29 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "store";
 import { setAuthState } from "store/slices/authSlice";
 import { getIsUserLogin, getProductList } from "store/rootSelector";
+import { setStoProducts } from "store/slices/productsSlice";
+import { toNonAccentVietnamese } from "utils/commonFunction";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Header = () => {
-  const [keyword, setKeyword] = useState<any>("");
-  // const dispatch = useDispatch();
+const Header = (props: any) => {
+  const { data, pagenumber, dataBrands } = props;
+  // console.log(data.metadata.products)
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const dispatch = useAppDispatch();
+
+  const dataProducts1 = useAppSelector(getProductList);
+  // console.log(dataProducts1);
+
+  // const dispatch = useDispatch();
   const isUserLogin = useAppSelector(getIsUserLogin);
-  const productList = useAppSelector(getProductList);
+
+  dispatch(setStoProducts({ dataProducts: data?.metadata?.products ?? [] }));
+
+  const [keyword, setKeyword] = useState<any>("");
+
   // const [
   //   createCo,
   //   { isLoading: LoadingcreateReview, error: errorcreateReview },
@@ -83,55 +99,10 @@ const Header = () => {
 
   // console.log(datacookie);
 
-  const [brand, setbrand] = useState<any>("All");
-  const [brands, setbrands] = useState<any>([]);
-  // const {
-  //   data: dataBrands,
-  //   error: errBrands,
-  //   isSuccess: isSuccessBrands,
-  //   isLoading: isLoadingBrands,
-  // } = useGetBrandsQuery(
-  //   {
-  //     page: 1,
-  //     limit: 1000,
-  //   },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //     skip: false,
-  //   }
-  // );
-  // useEffect(() => {
-  //   if (isSuccessBrands) {
-  //     setbrands(dataBrands?.brands);
-  //   }
-  // }, [dataBrands]);
+  const [brand, setBrand] = useState<any>(CONST_ALL);
+  const [brands, setBrands] = useState<any>(dataBrands?.brands ?? []);
 
   const [dropdown, setdropdown] = useState<any>(false);
-  // const dataProducts1 = useSelector(getDataProducts);
-  const dataProducts1: any = [];
-  const [dataProducts, setdataProducts] = useState<any>([]);
-  // const {
-  //   data: dataFetch,
-  //   error: errdataProducts,
-  //   isSuccess: isSuccessdataProducts,
-  //   isLoading: isLoadingdataProducts,
-  // } = useGetProductsQuery(
-  //   {
-  //     page: 1,
-  //     limit: 1000,
-  //   },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //     skip: false,
-  //   }
-  // );
-
-  // useEffect(() => {
-  //   if (isSuccessdataProducts) {
-  //     dispatch(setStoProducts(dataFetch?.metadata?.products));
-  //     setdataProducts(dataFetch?.metadata?.products);
-  //   }
-  // }, [dataFetch]);
 
   const [cartItems, setcartItems] = useState<any>([]);
   // const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
@@ -155,8 +126,13 @@ const Header = () => {
 
   const submitHandler = (value: any, bra: any) => {
     setKeyword(value);
+
     if (value.trim() || bra) {
       // navigate(`/?search=${value.trim()}&&brand=${bra}`);
+      const __searchParams = new URLSearchParams(searchParams);
+      __searchParams.set("keyword", value);
+      __searchParams.set("brand", bra);
+      router.replace(`${pathname}?${__searchParams.toString()}`);
     } else {
       // navigate("/");
     }
@@ -293,12 +269,10 @@ const Header = () => {
                   />
                   <button
                     type="submit"
-                    /* onClick={() => {
+                    onClick={() => {
                       setdropdown(false);
                       submitHandler(keyword, brand);
-                      
-                    }} */
-
+                    }}
                     className="search-button"
                   >
                     search
@@ -308,11 +282,11 @@ const Header = () => {
                     className="search-button"
                     value={brand}
                     onChange={(e) => {
-                      setbrand(e.target.value);
+                      setBrand(e.target.value);
                       submitHandler(keyword, e.target.value);
                     }}
                   >
-                    <option className="option__br">All</option>
+                    <option className="option__br">{CONST_ALL}</option>
 
                     {brands.map((bra: any, index: number) => {
                       return (
@@ -332,13 +306,14 @@ const Header = () => {
                     <div className="dropdown">
                       {dataProducts1
                         .filter((item: any) => {
-                          const searchTerm = keyword.toLowerCase();
-                          const fullName = item?.product_name.toLowerCase();
-
+                          const searchTerm =
+                            toNonAccentVietnamese(keyword).toLowerCase();
+                          const fullName = toNonAccentVietnamese(
+                            item?.product_name
+                          ).toLowerCase();
                           return (
-                            searchTerm &&
-                            fullName.includes(searchTerm) &&
-                            fullName !== searchTerm
+                            searchTerm && fullName.includes(searchTerm) /* &&
+                            fullName !== searchTerm */
                           );
                         })
                         .slice(0, 10)
@@ -347,7 +322,7 @@ const Header = () => {
                             className="dropdown-row"
                             onClick={(e) => {
                               e.stopPropagation();
-                              // submitHandler(item?.name, brand);
+                              submitHandler(item?.name, brand);
 
                               // navigate(`product-detail?id=${item?._id}`);
                               setKeyword("");
@@ -407,11 +382,10 @@ const Header = () => {
                 />
                 <button
                   type="submit"
-                  // onClick={() => {
-                  //   setdropdown(false);
-                  //   submitHandler(keyword, brand);
-                  // }}
-                  onClick={() => dispatch(setAuthState({ isUserLogin: !isUserLogin }))}
+                  onClick={() => {
+                    setdropdown(false);
+                    submitHandler(keyword, brand);
+                  }}
                   className="search-button"
                 >
                   search
@@ -420,11 +394,11 @@ const Header = () => {
                   className="search-button"
                   value={brand}
                   onChange={(e) => {
-                    setbrand(e.target.value);
+                    setBrand(e.target.value);
                     submitHandler(keyword, e.target.value);
                   }}
                 >
-                  <option className="option__br">All</option>
+                  <option className="option__br">{CONST_ALL}</option>
 
                   {brands.map((bra: any, index: number) => {
                     return (
@@ -444,14 +418,16 @@ const Header = () => {
                   <div className="dropdown">
                     {dataProducts1
                       .filter((item: any) => {
-                        const searchTerm = keyword.toLowerCase();
-                        const fullName = item?.product_name.toLowerCase();
+                        const searchTerm =
+                          toNonAccentVietnamese(keyword).toLowerCase();
+                        const fullName = toNonAccentVietnamese(
+                          item?.product_name
+                        ).toLowerCase();
                         // console.log(searchTerm);
                         // console.log(fullName);
                         return (
-                          searchTerm &&
-                          fullName.includes(searchTerm) &&
-                          fullName !== searchTerm
+                          searchTerm && fullName.includes(searchTerm) /* &&
+                          fullName !== searchTerm */
                         );
                       })
                       .slice(0, 10)
@@ -460,7 +436,7 @@ const Header = () => {
                           className="dropdown-row"
                           onClick={(e) => {
                             e.stopPropagation();
-                            // submitHandler(item?.name, brand);
+                            submitHandler(item?.name, brand);
                             // navigate(`product-detail?id=${item?._id}`);
                             setKeyword("");
                           }}

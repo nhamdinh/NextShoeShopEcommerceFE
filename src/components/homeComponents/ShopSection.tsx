@@ -10,7 +10,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ShopSection = (props: any) => {
   const { data, pagenumber, keyword, brand } = props;
-
+  console.log(data)
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
