@@ -25,11 +25,14 @@ import mainLogo from "./../../public/images/AVA79.svg";
 import axios from "axios";
 import { Link } from "navigation";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "store";
+import { setAuthState } from "store/authSlice";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>("");
   // const dispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
+  const authState = useAppSelector((state:any) => state.auth.authState);
   // const [
   //   createCo,
   //   { isLoading: LoadingcreateReview, error: errorcreateReview },
@@ -217,6 +220,7 @@ const Header = () => {
                     alt="to-top"
                     width={240}
                     height={240}
+
                   />
                 {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
@@ -290,10 +294,13 @@ const Header = () => {
                   />
                   <button
                     type="submit"
-                    onClick={() => {
+                    /* onClick={() => {
                       setdropdown(false);
                       submitHandler(keyword, brand);
-                    }}
+                      
+                    }} */
+                    
+
                     className="search-button"
                   >
                     search
@@ -372,7 +379,14 @@ const Header = () => {
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
               <Link className="navbar-brand" href="/">
-                <img src={mainLogo} alt="userprofileimage" />
+              <Image
+                    src={mainLogo}
+                    // className="to-top"
+                    alt="to-top"
+                    width={120}
+                    height={70}
+
+                  />
               </Link>
               {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>
@@ -396,9 +410,12 @@ const Header = () => {
                 />
                 <button
                   type="submit"
+                  // onClick={() => {
+                  //   setdropdown(false);
+                  //   submitHandler(keyword, brand);
+                  // }}
                   onClick={() => {
-                    setdropdown(false);
-                    submitHandler(keyword, brand);
+                    dispatch(setAuthState(true))
                   }}
                   className="search-button"
                 >

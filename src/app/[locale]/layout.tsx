@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { ReactNode, Suspense } from "react";
@@ -10,6 +10,9 @@ import type { Metadata } from "next";
 import LoadingSkeleton from "components/LoadingSkeleton";
 import StyledComponentsRegistry from "lib/antd.registry";
 import Header from "components/Header";
+const ReduxProvider = dynamic(() => import("./../../store/redux-provider"), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,14 +50,16 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className={inter.className}>
         <div className="app-wrapper">
           <StyledComponentsRegistry>
-            <TopHeader></TopHeader>
-            <Header />
-            <Navigation />
-            <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
-            <Footer></Footer>
+            <ReduxProvider>
+              <TopHeader></TopHeader>
+              <Header />
+              <Navigation />
+              <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
+              <Footer></Footer>
+            </ReduxProvider>
           </StyledComponentsRegistry>
         </div>
       </body>
