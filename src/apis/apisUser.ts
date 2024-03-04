@@ -4,7 +4,7 @@ import { deleteData, getData, getDataById, postData, updateData } from "./apis";
 const BE_API = API_LINK + "users";
 export const createUser = async (data: any) => {
   const response = await postData(`${BE_API}`, data, {
-    tag: "getAllUsers",
+    tag: "getAllUsers__TAG",
   });
   return await response.json();
 };
@@ -14,7 +14,7 @@ export const deleteUser = async (data: any) => {
     `${BE_API}/${data?.id}`,
     {},
     {
-      tag: "getAllUsers",
+      tag: "getAllUsers__TAG",
     }
   );
   return await response.json();
@@ -29,18 +29,24 @@ export const getUserById = async (data: any) => {
 
 export const updateUserById = async (data: any) => {
   const response = await updateData(`${BE_API}/${data?.id}`, data, {
-    tag: "getAllUsers",
+    tag: "getAllUsers__TAG",
   });
   return await response.json();
 };
 
 export const getAllUsers = async ({ currentPage, PAGE_SIZE }: any) => {
   return await getData(`${BE_API}?_page=${currentPage}&_limit=${PAGE_SIZE}`, {
-    tags: ["getAllUsers"],
+    tags: ["getAllUsers__TAG"],
   });
 };
 
 export const login = async (data: any) => {
   const response = await postData(`${BE_API}/login`, data, {});
   return await response.json();
+};
+
+export const getProfile = async () => {
+  return await getData(`${BE_API}/profile`, {
+    tags: ["getProfile__TAG"],
+  });
 };
