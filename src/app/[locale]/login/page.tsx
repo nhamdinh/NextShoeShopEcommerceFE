@@ -7,19 +7,19 @@ type Props = {
 };
 
 const LoginPage = async (props: any) => {
-  const currentPage = +(props?.searchParams?.page ?? 1);
-  const res = await getAllUsers({ currentPage, PAGE_SIZE });
-  const totalCount = +(res.headers?.get("X-Total-Count") ?? 1);
-  const data = await res.json();
+  // const currentPage = +(props?.searchParams?.page ?? 1);
+  // const res = await getAllUsers({ currentPage, PAGE_SIZE });
+  // const totalCount = +(res.headers?.get("X-Total-Count") ?? 1);
+  // const data = await res.json();
   // console.log(data);
   return (
     <Login
-      users={data?.code === 404 ? [] : data ?? []}
-      metadata={{
-        totalCount,
-        currentPage,
-        PAGE_SIZE,
-      }}
+      // users={data?.code === 404 ? [] : data ?? []}
+      // metadata={{
+      //   totalCount,
+      //   currentPage,
+      //   PAGE_SIZE,
+      // }}
     ></Login>
   );
 };

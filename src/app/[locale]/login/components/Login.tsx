@@ -1,47 +1,45 @@
 "use client";
+import { login } from "apis/apisUser";
 import Message from "components/LoadingError/Error";
 import Loading from "components/LoadingError/Loading";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { ACCESSTOKEN_STORAGE, NAME_STORAGE, REFRESHTOKEN_STORAGE } from "utils/constants";
-// import Message from "../components/LoadingError/Error";
-// import Loading from "../components/LoadingError/Loading";
-// import { useNavigate } from "react-router-dom";
-// import { useLoginMutation } from "../store/components/auth/authApi";
-// import {
-//   ACCESSTOKEN_STORAGE,
-//   NAME_STORAGE,
-//   REFRESHTOKEN_STORAGE,
-// } from "../utils/constants";
-// import { openToast } from "../store/components/customDialog/toastSlice";
+import {
+  ACCESSTOKEN_STORAGE,
+  NAME_STORAGE,
+  REFRESHTOKEN_STORAGE,
+} from "utils/constants";
+import { Button, Modal, message } from "antd";
 
-const Login = (props:any) => {
+const Login = (props: any) => {
   window.scrollTo(0, 0);
-  const { data, pagenumber, keyword, brand } = props;
+  const { data } = props;
+  const router = useRouter();
 
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
   const [isError, setisError] = useState<any>(false);
 
-//   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-//   const [login, { isLoading, error }] = useLoginMutation();
-    const login = (values:any)=>{
-        
-    }
   const onLogin = async (values: any) => {
     setisError(false);
-
+    setIsLoading(true)
     const res = await login(values);
     //@ts-ignore
-    const data = res?.data?.metadata;
+    const data = res?.metadata;
 
     if (data) {
       localStorage.setItem(ACCESSTOKEN_STORAGE, data?.token);
       localStorage.setItem(REFRESHTOKEN_STORAGE, data?.refreshToken);
       localStorage.setItem(NAME_STORAGE, data?.name);
-    //   navigate("/");
+
+      messageApi.open({
+        type: "success",
+        content: "Login thanh cong",
+      });
+
+      router.replace(`/`);
+
+      //   navigate("/");
     } else {
       setisError(true);
       //@ts-ignore
@@ -65,11 +63,16 @@ const Login = (props:any) => {
       //   });
       // }
     }
+    setIsLoading(false)
+
   };
   const [isLoading, setIsLoading] = useState<any>(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+      {contextHolder}
+
       {isError && <Message variant="alert-danger" mess={data} />}
       <form
         className="Login col-md-8 col-lg-4 col-11"

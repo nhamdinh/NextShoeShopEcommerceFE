@@ -39,3 +39,8 @@ export const getAllUsers = async ({ currentPage, PAGE_SIZE }: any) => {
     tags: ["getAllUsers"],
   });
 };
+
+export const login = async (data: any) => {
+  const response = await postData(`${BE_API}/login`, data, {});
+  return await response.json();
+};
