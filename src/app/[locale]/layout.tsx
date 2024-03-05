@@ -58,7 +58,7 @@ export default async function LocaleLayout({
   };
 
   const res = await getAllProducts({ ...params });
-  const resBrands = await getAllBrands({});
+  const resBrands = await getAllBrands();
   const data = await res.json();
   const dataBrands = await resBrands.json();
 

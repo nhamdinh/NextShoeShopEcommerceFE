@@ -35,7 +35,7 @@ export const updateUserById = async (data: any) => {
   return await response.json();
 };
 
-export const getAllBrands = async ({ page, limit, keyword }: any) => {
+export const getAllBrands = async () => {
   return await getData(`${BE_API}/get-all-brands`, {
     tags: [],
   });

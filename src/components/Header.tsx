@@ -31,9 +31,48 @@ import { getIsUserLogin, getProductList } from "store/rootSelector";
 import { setStoProducts } from "store/slices/productsSlice";
 import { toNonAccentVietnamese } from "utils/commonFunction";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getProfile } from "apis/apisUser";
+import { getAllBrands } from "apis/apisBrand";
+import useSWR from "swr";
+import { authHeader } from "apis/authHeader";
+//@ts-ignore
+// const fetcher = (...args: any) => fetch(...args).then((res: any) => res.json());
+
+function fetcher(url) {
+  return fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json", ...authHeader() },
+    // body: JSON.stringify({ username, password }),
+  }).then((res) => res.json());
+}
 
 const Header = (props: any) => {
   const { data, pagenumber, dataBrands } = props;
+  // const resBrands = await getAllBrands({});
+  // console.log(resBrands)
+  // const res = await getProfile();
+  // console.log(res)
+  // const dataBrands = await resBrands.json();
+  // getProfile
+
+  const [cartItems1, setcartItems1] = useState<any>([]);
+
+  const { data: data11, error } = useSWR(
+    "http://localhost:5000/api/categorys/get-all-brands",
+    fetcher
+  );
+
+  const { data: data22, error: error2 } = useSWR(
+    "http://localhost:5000/api/users/profile",
+    fetcher
+  );
+  console.log(data22);
+
+  useEffect(() => {
+    if (data11?.brands) {
+      setcartItems1(data11?.brands);
+    }
+  }, [data11]);
   // console.log(dataProfile);
   const router = useRouter();
   const pathname = usePathname();
