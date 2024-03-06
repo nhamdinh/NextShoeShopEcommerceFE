@@ -1,6 +1,10 @@
 export const API_LINK = process.env.NEXT_PUBLIC_API_URL; //
 // export const API_LINK = 'http://104.154.49.183:5000/api';
+/* API_LINK */
 
+export const API_profile = API_LINK + "users/profile"; //
+
+/* API_LINK */
 export const ACCESS_TOKEN = "testObject"; //
 export const STORAGE_USER = "user"; //
 export const STORAGE_CART = "cart";
@@ -10,7 +14,8 @@ export const CART_SELECT = "cart_select";
 export const COOKIE_USERNAME = "username";
 export const COOKIE_CUS_ID = "cus_id";
 export const REGION_ID = "reg_01GVCC8PD5YP4DFQHXHFVGKV95";
-export const ECOMMERCE_PNG = "https://png.pngtree.com/png-clipart/20200410/ourmid/pngtree-online-shopping-e-commerce-with-cellphone-png-image_2179100.jpg";
+export const ECOMMERCE_PNG =
+  "https://png.pngtree.com/png-clipart/20200410/ourmid/pngtree-online-shopping-e-commerce-with-cellphone-png-image_2179100.jpg";
 
 //language
 export const KEY_LANGUAGE = "language";
@@ -18,7 +23,7 @@ export const LANG_KO = "ko";
 export const LANG_EN = "en";
 export const DEFAULT_LANG = "ko";
 
-export const CONST_ALL = 'All';
+export const CONST_ALL = "All";
 export const PAGE_SIZE = 9;
 export const PAGE_SIZE_16 = 16;
 export const PAGE_SIZE_20 = 20;
@@ -56,9 +61,12 @@ export const CURRENT_HIGHLIGHT_CATEGORY_ID_LV3 =
   "CURRENT_HIGHLIGHT_CATEGORY_ID_LV3";
 
 //response wechatpay
-export const merchantKey = 'lnWdXWZJLiBjerVupC3cC8OYQAiiF7Sqo7Hy/1s1eKwP+1QFGjYtirHvBysB8xtQnLN02cH0YIt00DrBjo0UPg==';
-export const encodekeyH5 = 'HyMITmhgC7uWv915XMV6mgeSbfB7lTvFxbt1DNXbT70utRdvwzKy2Myj9jRjX1/Kf4xIbBRaq96PGj9An7S2xg==';
-export const encodekey_wechatPC = 'ny7DbpsmQ9kW8Z9Gsd98xJqz+T/w7lRwxII/Nj8+sDwr08XQSX76cez37OCcln4WmFn2waqAIgns2XDDIMUV2Q==';
+export const merchantKey =
+  "lnWdXWZJLiBjerVupC3cC8OYQAiiF7Sqo7Hy/1s1eKwP+1QFGjYtirHvBysB8xtQnLN02cH0YIt00DrBjo0UPg==";
+export const encodekeyH5 =
+  "HyMITmhgC7uWv915XMV6mgeSbfB7lTvFxbt1DNXbT70utRdvwzKy2Myj9jRjX1/Kf4xIbBRaq96PGj9An7S2xg==";
+export const encodekey_wechatPC =
+  "ny7DbpsmQ9kW8Z9Gsd98xJqz+T/w7lRwxII/Nj8+sDwr08XQSX76cez37OCcln4WmFn2waqAIgns2XDDIMUV2Q==";
 export const SUCCESS_CODE = "0000";
 export const NiceResType_AUTH = "AUTH";
 export const NiceResType_PAY = "PAY";
@@ -69,8 +77,15 @@ export const SVC_PRDT_CD = "01";
 export const ALIPAY_URL =
   "https://web.nicepay.co.kr/lite/alipay/alipay_auth.jsp";
 export const WECHAT_URL =
-  'https://web.nicepay.co.kr/lite/tenpay/wechatH5Request.jsp';
-export const TIME_OPTION ={year:"2-digit",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"};
+  "https://web.nicepay.co.kr/lite/tenpay/wechatH5Request.jsp";
+export const TIME_OPTION = {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+};
 export const VALID = "valid_name";
 export const URL_KOCHA = "https://www.kochamall.co.kr";
 export const BTN_CONFIRM_NONE = "none";
@@ -179,13 +194,14 @@ export const KUADICOM_ROAD_WAY = "zhongtong"; // shipping method 1,3
 //airway
 export const KUADICOM_AIR_WAY = "shunfeng"; // shipping method 2,4
 //foreigner
-export const FOREIGNER_RAIDIO = 'foreigner'
+export const FOREIGNER_RAIDIO = "foreigner";
 
 export const regexNotAllowNumber = /^([^0-9]*)$/;
 export const regexNotAllowNumberAndSpecialCharecter = /^[a-zA-Z_ ]*$/g;
 export const regexOnlyNumber = /^[0-9\b]+$/;
-export const regexPassword = /^(?=[^0-9\n]*[0-9])(?=.*[a-zA-Z])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,20}$/;
-export const OPTION_DEFAULT = '-'
+export const regexPassword =
+  /^(?=[^0-9\n]*[0-9])(?=.*[a-zA-Z])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,20}$/;
+export const OPTION_DEFAULT = "-";
 
 export const SVG_SPIN = `<svg
 viewBox="0 0, 100 100"
@@ -251,9 +267,9 @@ type="rotate"
 repeatCount="indefinite"
 dur="1300ms"
 />
-</svg>`
+</svg>`;
 export const REACT_ENV = process.env.REACT_PUBLIC_ENV;
-export const SOCKET_HOST = 'http://104.154.49.183:6000';
+export const SOCKET_HOST = "http://104.154.49.183:6000";
 /* env */
 export const NAME_STORAGE = "name";
 export const ACCESSTOKEN_STORAGE = "accessToken";

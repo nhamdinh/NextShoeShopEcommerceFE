@@ -12,6 +12,9 @@ import StyledComponentsRegistry from "lib/antd.registry";
 import Header from "components/Header";
 import { getAllProducts } from "apis/apisProduct";
 import { getAllBrands } from "apis/apisBrand";
+import { CONST_ALL } from "utils/constants";
+import { headers } from "next/headers";
+
 const ReduxProvider = dynamic(() => import("./../../store/redux-provider"), {
   ssr: false,
 });
@@ -49,12 +52,13 @@ export default async function LocaleLayout({
 }: Props) {
   // Enable static rendering
   unstable_setRequestLocale(locale);
-
+  const headersList = headers();
+  const referer = headersList.get("referer") ?? "";
   const params = {
     page: 1,
     limit: 1000,
     keyword: "",
-    brand: "ALL",
+    brand: CONST_ALL,
   };
 
   const res = await getAllProducts({ ...params });
@@ -69,7 +73,12 @@ export default async function LocaleLayout({
           <StyledComponentsRegistry>
             <ReduxProvider>
               <TopHeader></TopHeader>
-              <Header data={data} dataBrands={dataBrands} />
+              {/* {referer.includes("login") || referer.includes("register") ? (
+                <></>
+              ) : (
+              )} */}
+                <Header data={data} dataBrands={dataBrands} />
+
               <Navigation />
               <Suspense fallback={<LoadingSkeleton />}>{children}</Suspense>
               <Footer></Footer>

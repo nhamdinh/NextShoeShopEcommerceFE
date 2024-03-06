@@ -1,12 +1,11 @@
 "use client";
 import "./style.scss";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 // import {
 //   useGetProfileQuery,
 //   useLogoutMutation,
 // } from "../store/components/auth/authApi";
-import { CONST_ALL, NAME_STORAGE } from "../utils/constants";
+import { API_profile, CONST_ALL, NAME_STORAGE } from "../utils/constants";
 // import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 // import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 // import {
@@ -26,8 +25,12 @@ import axios from "axios";
 import { Link } from "navigation";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "store";
-import { setAuthState } from "store/slices/authSlice";
-import { getIsUserLogin, getProductList } from "store/rootSelector";
+import { setAuthState, setUserInfo, userLogout } from "store/slices/authSlice";
+import {
+  getIsUserLogin,
+  getProductList,
+  getUserInfo,
+} from "store/rootSelector";
 import { setStoProducts } from "store/slices/productsSlice";
 import { toNonAccentVietnamese } from "utils/commonFunction";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -47,100 +50,27 @@ function fetcher(url) {
 }
 
 const Header = (props: any) => {
-  const { data, pagenumber, dataBrands } = props;
-  // const resBrands = await getAllBrands({});
-  // console.log(resBrands)
-  // const res = await getProfile();
-  // console.log(res)
-  // const dataBrands = await resBrands.json();
-  // getProfile
-
-  const [cartItems1, setcartItems1] = useState<any>([]);
-
-  const { data: data11, error } = useSWR(
-    "http://localhost:5000/api/categorys/get-all-brands",
-    fetcher
-  );
-
-  const { data: data22, error: error2 } = useSWR(
-    "http://localhost:5000/api/users/profile",
-    fetcher
-  );
-  console.log(data22);
-
-  useEffect(() => {
-    if (data11?.brands) {
-      setcartItems1(data11?.brands);
-    }
-  }, [data11]);
-  // console.log(dataProfile);
+  const { data, dataBrands } = props;
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const dispatch = useAppDispatch();
-
+  const userInfo = useAppSelector(getUserInfo);
   const dataProducts1 = useAppSelector(getProductList);
-  // console.log(dataProducts1);
-
-  // const dispatch = useDispatch();
-  const isUserLogin = useAppSelector(getIsUserLogin);
-
   dispatch(setStoProducts({ dataProducts: data?.metadata?.products ?? [] }));
 
-  const [keyword, setKeyword] = useState<any>("");
-
-  // const [
-  //   createCo,
-  //   { isLoading: LoadingcreateReview, error: errorcreateReview },
-  // ] = useCreateCoMutation();
-
-  // const onCreateReviewProduct = async (values: any) => {
-  //   const res = await createCo({});
-  //   //@ts-ignore
-  //   const data = res?.data;
-  //   console.log(data);
-  //   if (data) {
-  //   } else {
-  //   }
-  // };
-
-  let axiosConfig = {
-    withCredentials: true,
-    credentials: "include",
-  };
-
-  const loginUser = async (data: any) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/cookie`,
-        axiosConfig
-      );
-      console.log(res);
-      return res;
-    } catch (error) {
-      console.log(error);
+  const { data: dataProfile, error: error2 } = useSWR(API_profile, fetcher);
+  useEffect(() => {
+    if (dataProfile?.metadata) {
+      // setdataFetched(dataProfile?.metadata);
+      dispatch(setUserInfo({ userInfo: { ...dataProfile?.metadata } }));
+      localStorage.setItem(NAME_STORAGE, dataProfile?.metadata?.name);
     }
-  };
+  }, [dataProfile]);
 
-  // const {
-  //   data: datacookie,
-  //   error: errBrandsx,
-  //   isSuccess: isSuccessBrandsx,
-  //   isLoading: isLoadingBrandsx,
-  // } = useGetCoQuery(
-  //   {},
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //     skip: false,
-  //   }
-  // );
-
-  // console.log(datacookie);
-
+  const [keyword, setKeyword] = useState<any>("");
   const [brand, setBrand] = useState<any>(CONST_ALL);
-  const [brands, setBrands] = useState<any>(dataBrands?.brands ?? []);
-
+  const brands = dataBrands?.brands ?? [];
   const [dropdown, setdropdown] = useState<any>(false);
 
   const [cartItems, setcartItems] = useState<any>([]);
@@ -177,42 +107,14 @@ const Header = (props: any) => {
       // navigate("/");
     }
   };
-  // const [userInfo, setdataFetched] = useState<any>({});
-  // const userInfo = useSelector(getUserInfo);
-  const userInfo: any = {};
-
-  // const {
-  //   data: dataProfile,
-  //   error,
-  //   isSuccess: isSuccessProfile,
-  //   isLoading,
-  // } = useGetProfileQuery(
-  //   {},
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //     skip: false,
-  //   }
-  // );
-
-  // useEffect(() => {
-  //   if (isSuccessProfile) {
-  //     // setdataFetched(dataProfile?.metadata);
-  //     dispatch(setUserInfo({ ...dataProfile?.metadata }));
-  //     localStorage.setItem(NAME_STORAGE, dataProfile?.metadata?.name);
-  //   }
-  // }, [dataProfile]);
-
-  // useEffect(() => {
-  //   // console.log(error);
-  // }, [error]);
 
   // const [logout] = useLogoutMutation();
 
   const logoutHandler = async () => {
     // await logout({});
     // setdataFetched({});
-    // dispatch(userLogout());
-    // navigate("/");
+    dispatch(userLogout());
+    router.replace("/login")
   };
 
   return (
@@ -507,9 +409,9 @@ const Header = (props: any) => {
                       Profile
                     </Link>
 
-                    <a className="dropdown-item" onClick={logoutHandler}>
+                    <div className="dropdown-item" onClick={logoutHandler}>
                       Logout
-                    </a>
+                    </div>
                   </div>
                 </div>
               ) : (

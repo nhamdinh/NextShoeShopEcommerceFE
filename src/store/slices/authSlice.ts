@@ -19,6 +19,9 @@ export const authSlice = createSlice({
   reducers: {
     userLogout: (state: IfAuthStore, action: PayloadAction) => {
       localStorage.clear();
+      state.isUserLogin = false;
+      state.userInfo = {};
+      state.accessToken = "";
       // localStorage.removeItem(STORAGE_USER);
       // localStorage.removeItem(KEY_LANGUAGE);
     },
